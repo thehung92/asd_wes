@@ -1,0 +1,12 @@
+# ignore these files
+.Rhistory
+.Rdata
+data/*
+docs/*
+output/*
+temp/*
+# except
+data/*md
+docs/*xlsx
+output/*md
+temp/*md
