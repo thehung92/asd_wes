@@ -8,25 +8,28 @@ In Terminal, change the current working directory to your local project.
 ## 2. Initialize the local directory as a Git repository.
 
 	git init
-	
+
+Create .gitignore file and add rule to ignore data from commit
+
+    touch .gitignore
+
 Add the files in your new local repository. This stages them for the first commit.
 
 	git add .
 
-or:
-	
-	git add --all
-
 Commit the files that you've staged in your local repository.
 
 	git commit -m 'First commit'
+    git commit -m 'add md files'
+    git commit -m 'v1.0 preserve dir structure'
+
 
 
 Copy remote repository URL field from your GitHub repository, in the right sidebar, copy the remote repository URL.
 
 In Terminal, add the URL for the remote repository where your local repostory will be pushed.
 
-	git remote add origin <remote repository URL>
+	git remote add origin https://github.com/thehung92/asd_wes.git
 	
 Sets the new remote:
 	

@@ -5,8 +5,12 @@ data/*
 docs/*
 output/*
 temp/*
+temp/data/*
+temp/subset/*
 # except
 !data/*md
 !docs/*xlsx
 !output/*md
 !temp/*md
+!temp/data/*md
+!temp/subset/*md
