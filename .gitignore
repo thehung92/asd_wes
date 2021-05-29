@@ -6,7 +6,7 @@ docs/*
 output/*
 temp/*
 # except
-data/*md
-docs/*xlsx
-output/*md
-temp/*md
+!data/*md
+!docs/*xlsx
+!output/*md
+!temp/*md
