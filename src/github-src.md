@@ -22,6 +22,7 @@ Commit the files that you've staged in your local repository.
 	git commit -m 'First commit'
     git commit -m 'add md files'
     git commit -m 'v1.0 preserve dir structure'
+	git commit -m 'v2.0 sunday work'
 
 
 
@@ -36,7 +37,11 @@ Sets the new remote:
 	git remote -v
 
 Push the changes in your local repository to GitHub.
-
-	git push origin master
+	`git push origin master
+	git push`
 
 Pushes the changes in your local repository up to the remote repository you specified as the origin
+
+## remove remote
+	`git remote remove origin`
+##
