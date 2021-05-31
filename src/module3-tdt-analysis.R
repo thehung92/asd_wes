@@ -15,9 +15,10 @@ x[,c(1,2,9)] %>%
   mutate(CHR=gsub("23", "X", CHR)) -> output
 fwrite(x=output, file="output/tdt/regions.txt", sep="\t",
       quote=FALSE, col.names=FALSE)
+cat("output/tdt/regions.txt")
 # extract variants info from vcf file
 INPUT="./data/ASD_SAMPLES_bwa_gatk_variants_hg38_annotate.vcf.gz"
-QUERY="bcftools query -R output/tdt/regions.txt -f '%CHROM %POS %ID %REF %ALT\n'"
+QUERY="source ~/.bashrc ; bcftools query -R output/tdt/regions.txt -f '%CHROM %POS %ID %REF %ALT\n'"
 CMD=paste(QUERY, INPUT)
 df2 <- fread(cmd=CMD, header=FALSE, sep=" ",
              col.names = c("CHROM", "POS", "ID", "REF", "ALT"))
@@ -26,10 +27,10 @@ OUTPUT="./output/tdt/asd.290_tdt-sig-var.vcf"
 df2 %>%
   mutate(QUAL=".", FILTER=".", INFO=".") %>%
   fwrite(x=., file=OUTPUT, quote=FALSE, sep="\t", col.names=FALSE)
+cat(OUTPUT)
 # annotate ./output/tdt/asd.290_tdt-sig-var.vcf with VEP web tools
 # we will get asd.290_tdt-vep.txt
 INPUT="./output/tdt/asd.290_tdt-vep.txt"
-df3 <- fread(file=INPUT, header=TRUE, sep="\t")
 
 # take variants with BONF correction P-value 0.05 only
 df0 %>%
@@ -45,7 +46,7 @@ output %>%
   left_join(., df1[,c("SNP", "A1", "OR")], by="SNP") %>%
   mutate(OR=round(OR, digits=4)) -> output
 # annotate output with gene and CADDscore from VEP
-db.vep <- fread(file="./data/asd.tdtsign_veponline.txt") %>% as_tibble()
+db.vep <- fread(file="./output/tdt/asd.290_tdt-vep.txt") %>% as_tibble()
 db.vep[,c(1,6,37)] %>%
   rename(SNP=1) %>%
   left_join(output, ., by="SNP") %>%
@@ -64,5 +65,6 @@ output %>%
   unite("CHR:POS",2:3, remove=TRUE, sep=":") %>%
   unite("REF/ALT", 3:4, remove=TRUE, sep="/") -> output
 # write output to table1.csv
-OUTPUT="./output/tdt/table1.csv"
+OUTPUT="./output/plot-table/table1.csv"
 write_csv(output, file=OUTPUT)
+cat(OUTPUT)

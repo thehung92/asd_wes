@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 # cd to woking dir
 cd /home/public
+# populate dir structure
+mkdir -p data docs output src temp/data temp/subset
 # filter pass
 # remove variants called on contigs
 # split multi-allelic
@@ -13,7 +15,6 @@ bcftools view -i 'FILTER="PASS"' ${INPUT} -Ou |\
 bcftools index ${OUTPUT}
 # work with biallelic variants only in plink format
 INPUT="./data/asd.hg38_QC.vcf.gz"
-mkdir -p ./temp/data/
 OUTPUT="./temp/data/asd.hg38_QC2"
 plink2 --vcf ${INPUT} \
 	--id-delim --allow-extra-chr --chr 1-22,X,Y --max-alleles 2 \
@@ -49,7 +50,6 @@ plink --bfile $INPUT \
     --make-bed --out $OUTPUT
 
 # prune snp by LD
-mkdir -p ./temp/subset/
 INPUT="./temp/data/asd.hg38_hwe"
 OUTPUT="./temp/subset/asd.hg38_pairwise"
 plink --bfile $INPUT --indep-pairwise 1500 150 0.2 --out $OUTPUT
