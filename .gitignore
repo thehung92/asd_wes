@@ -1,17 +1,16 @@
 # ignore these files
+*.Rproj
+.Rproj.user
 .Rhistory
 .Rdata
 data/*
 docs/*
-output/*
+output/**
 temp/*
 temp/data/*
 temp/subset/*
-# except
-!data/*md
+# except these file
 !docs/*xlsx
-!output/*md
-!temp/*md
-!temp/data/*md
-!temp/subset/*md
-.Rproj.user
+!**/README.md
+!output/plot-table/**
+!**/.DS_Store

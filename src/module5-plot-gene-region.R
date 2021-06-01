@@ -42,7 +42,7 @@ p2 <- ggplot(head(recomb.rate), aes(pos, recomb_rate)) +
         plot.background=element_blank(),
         panel.background=element_blank())
 # create bottom legend
-set.seed=12345
+set.seed(12345)
 df <- tibble(x=1:20,
              y=runif(20,0,8),
              z=runif(20,0,1))
@@ -102,11 +102,12 @@ g <- richtext_grob(text,
                    hjust=0,vjust=0.5,
                    gp=gpar(fontfamily="Arial", fontsize=8, col="#808080"))
 #### loop plot ####
+
 for (i in 1:4) {
   # i=1
   print(paste("Plotting variant",i,"using gviz"))
   #
-  tdt.sel <- tdt %>% dplyr:::slice(i)
+  tdt.sel <- tdt %>% dplyr::slice(i)
   sel.chr <- tdt.sel$CHR
   sel.pos <- tdt.sel$BP
   range <- 5e5
@@ -200,7 +201,7 @@ for (i in 1:4) {
                                col=col1)
   # plot pvalue data track with grouping based on r2 correlation
   cat("creating pvalue data track with r2 grouping...\n")
-  file=paste0("./data/matrix.r2.unrelated.variant",i,".txt")
+  file=paste0("temp/ld-r2/matrix.r2.unrelated.variant",i,".txt")
   df.ldr2 <- read.csv(file, sep="")
   # select r2 value with lead variant
   df.ldr2 %>%
@@ -282,17 +283,13 @@ for (i in 1:4) {
   # report output
   print(output)
 }
-# # move the figure
-# command <- paste("cp 4f*png", "/Users/hung/Documents/writing/Autism_Vinmec_coop/ejhg/")
-# system(command)
-# # rename
-# path <- "/Users/hung/Documents/writing/Autism_Vinmec_coop/ejhg/"
-# f2 <- list.files(pattern="4f.*png") %>% paste0(path, .)
-# n2 <- paste0(path, c("figure3", "figure.s2", "figure.s3", "figure.s4"),".png")
-# command <- paste("mv", f2,n2)
-# for (i in 1:length(command)) {
-#   system(command[i])
-# }
-
+# rename figure
+DIR="output/plot-table/"
+FILES <- list.files(DIR, pattern="variant.*png") %>% paste0(DIR, .)
+FILES2 <- paste0(DIR, c("figure3", "figureS2", "figureS3", "figureS4"), ".png")
+CMD=paste("mv", FILES, FILES2)
+for (i in 1:length(CMD)) {
+  system(CMD[i])
+}
 #### reset before exit ####
-rm(list=ls())
+# rm(list=ls())

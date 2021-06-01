@@ -44,4 +44,6 @@ Pushes the changes in your local repository up to the remote repository you spec
 
 ## remove remote
 	`git remote remove origin`
-##
+## git revert change
+
+	git reset HEAD~1
