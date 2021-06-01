@@ -14,3 +14,4 @@ temp/subset/*
 !temp/*md
 !temp/data/*md
 !temp/subset/*md
+.Rproj.user

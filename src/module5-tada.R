@@ -153,8 +153,8 @@ re.TADA %>% arrange(qval) %>% filter(qval < 0.05) %>%
 merge(re.TADA.select[,c(1,5,6)], tada.data[,1:3], by="gene.id", all.x=TRUE) %>%
   arrange(qval) %>%
   rename(DMIS=4, LGD=5) -> output
-OUTPUT="./output/plot-table/TADA_denovoonly.txt"
-fwrite(output, file=OUTPUT, quote=FALSE, sep="\t")
+OUTPUT="./output/plot-table/table2.csv"
+write_csv(output, file=OUTPUT)
 #
 #### read SFARI ####
 asd.risk.gene <- read.csv("./data/SFARI-Gene_genes_10-29-2020release_11-04-2020export.csv")
@@ -164,6 +164,6 @@ as_tibble(asd.risk.gene) %>%
 # write table S1
 merge(tada.data[,1:3], asd.risk.gene, by.x="gene.id", by.y="gene.symbol") %>%
   rename(DMIS=2, LGD=3) -> output2
-OUTPUT2="./output/plot-table/tables1.txt"
-fwrite(output2, file=OUTPUT2, quote=FALSE, sep="\t")  
+OUTPUT2="./output/plot-table/tables1.csv"
+write_csv(output2, file=OUTPUT2)
 

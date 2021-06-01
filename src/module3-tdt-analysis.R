@@ -2,6 +2,10 @@
 #
 library(data.table)
 library(tidyverse)
+library(CMplot)
+library(qqman)
+library(grid)
+library(gridGraphics)
 #
 df0 <- fread(file="./output/tdt/asd.290_ibd-clean.tdt.adjusted")
 df1 <- fread(file="./output/tdt/asd.290_ibd-clean.tdt")
@@ -67,4 +71,55 @@ output %>%
 # write output to table1.csv
 OUTPUT="./output/plot-table/table1.csv"
 write_csv(output, file=OUTPUT)
-cat(OUTPUT)
+
+#### plot manhattan ####
+rm(list=ls())
+#
+# import data
+IBD.tdt <- read.csv("output/tdt/asd.290_ibd-clean.tdt", sep="")
+IBD.tdt.adj <- read.csv("output/tdt/asd.290_ibd-clean.tdt.adjusted", sep="")
+# draw manhattan plot with CMplot (data format: SNP-CHR-BP-P1-P2)
+as_tibble(IBD.tdt) %>%
+  select(c(2,1,3,10)) %>%
+  mutate(CHR=as.character(CHR)) %>%
+  mutate_at("CHR", ~gsub(pattern="23", replacement="X", x=.)) -> df1
+threshold <- 5e-2 / nrow(df1)
+SNPs <- df1 %>% filter(P<=threshold) %>% select(1) %>% unlist()
+# plot in R device
+OUTPUT1="./output/plot-table/figure2.pdf"
+pdf(file=OUTPUT1, width=8, height=4)
+CMplot(df1,type="p",plot.type="m",LOG10=TRUE,chr.labels.angle=45,
+       cex=0.5, amplify=TRUE, cex.lab=1, cex.axis=0.8,
+       highlight=SNPs, highlight.text=SNPs, highlight.text.xadj=rep(0,4), highlight.text.cex=0.8,
+       threshold=threshold,
+       file="pdf",memo="", file.output=FALSE,verbose=TRUE,width=8,height=4)
+dev.off()
+# draw qq plot
+OUTPUT2="./output/plot-table/figureS1.pdf"
+pdf(file=OUTPUT2, width=4, height=4)
+CMplot(df1,plot.type="q",box=FALSE, main=NULL,
+       conf.int=TRUE,conf.int.col=NULL,threshold.col="red",threshold.lty=2,
+       file="pdf",memo="",
+       file.output=FALSE,verbose=TRUE,width=4,height=4)
+dev.off()
+#
+f2 <- list.files(pattern="plot.P.pdf")
+n2 <- "/Users/hung/Documents/writing/Autism_Vinmec_coop/ejhg/figure.s1.pdf"
+command <- paste("cp",f2, n2)
+system(command)
+#### ####
+#
+as_tibble(IBD.tdt) %>%
+  select(c(2,1,3,10)) -> df1
+#
+manhattan(df1, ylim=c(0,9),
+          #main="Transmission disequilibrium test",
+          #cex=0.6, cex.axis=0.9,
+          col=c("blue4","orange3"),
+          genomewideline=-log10(6.66e-7), suggestiveline=FALSE,
+          annotatePval=6.66e-7, annotateTop=FALSE,
+          chrlabs=c(1:22,"X"))
+p <- recordPlot()
+g <- grid.grabExpr(grid.echo(p))
+ggsave("figure2.pdf", plot=g, device="pdf",
+       units="mm", width=175, height=90)

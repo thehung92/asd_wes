@@ -34,3 +34,5 @@ as_tibble(gostRslt2$result) %>%
 df %>% filter(p_value<=0.05) -> output
 OUTPUT="output/plot-table/gprofiler_fdr.xlsx"
 write.xlsx(output, file=OUTPUT)
+OUTPUT="output/plot-table/tables2.csv"
+write_csv(output, file=OUTPUT)
