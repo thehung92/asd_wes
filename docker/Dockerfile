@@ -20,6 +20,7 @@ RUN apt-get update \
     && apt-get install -y wget \
     && apt-get install -y zip \
     && apt-get install -y less \
+    && apt-get install -y nano \
     && wget https://s3.amazonaws.com/plink2-assets/alpha2/plink2_linux_x86_64.zip \
     && unzip plink2_linux_x86_64.zip ; rm plink2_linux_x86_64.zip
 # make bash start from biotools env and export /root/tools to $PATH, this layer define config

@@ -1,4 +1,7 @@
 #!/usr/bin/env Rscript
+r = getOption("repos")
+r["CRAN"] = "http://cran.us.r-project.org"
+options(repos = r)
 install.packages('pacman', dependencies=TRUE)
 pacman::p_install("CMplot")
 pacman::p_install("Gviz")
