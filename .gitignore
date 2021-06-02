@@ -1,16 +1,24 @@
-# ignore these files
+# ignore these archive files
 *.Rproj
 .Rproj.user
 .Rhistory
 .Rdata
+**/.DS_Store
+# pair of rule for dir
+output/*
+!output/plot-table
+#
+output/denovo/*
+!output/denovo
+#
+output/tdt
+!output/tdt/*
+#
 data/*
 docs/*
-output/**
 temp/*
 temp/data/*
 temp/subset/*
 # except these file
 !docs/*xlsx
-!**/README.md
-!output/plot-table/**
-!**/.DS_Store
+!**/*.md

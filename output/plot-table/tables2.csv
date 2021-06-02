@@ -1,0 +1,10 @@
+source,term_id,term_name,term_size,intersection,p_value
+GO:MF,GO:0004484,mRNA guanylyltransferase activity,1,RNGTT,0.023333909005429348
+GO:MF,GO:0008227,G protein-coupled amine receptor activity,45,"TAAR9,HTR2C",0.023333909005429348
+GO:MF,GO:0050355,triphosphatase activity,1,RNGTT,0.023333909005429348
+GO:MF,GO:0008192,RNA guanylyltransferase activity,2,RNGTT,0.027988600698224
+GO:MF,GO:0071886,"1-(4-iodo-2,5-dimethoxyphenyl)propan-2-amine binding",2,HTR2C,0.027988600698224
+GO:MF,GO:0001587,Gq/11-coupled serotonin receptor activity,3,HTR2C,0.034970646358271296
+GO:MF,GO:0070568,guanylyltransferase activity,4,RNGTT,0.039949199954365716
+GO:MF,GO:0004930,G protein-coupled receptor activity,382,"TAAR9,CELSR2,HTR2C",0.045365587605252423
+GO:MF,GO:0001594,trace-amine receptor activity,6,TAAR9,0.04656717532581799

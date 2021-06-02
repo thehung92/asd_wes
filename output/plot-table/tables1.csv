@@ -1,0 +1,17 @@
+gene.id,DMIS,LGD,genetic.category,gene.score,number.of.reports
+CAMK2A,1,0,"Rare Single Gene Mutation, Syndromic, Genetic Association, Functional",3,8
+CDH13,1,0,Rare Single Gene Mutation,2,3
+CHD8,1,0,"Rare Single Gene Mutation, Syndromic, Functional",1,57
+DYRK1A,0,1,"Rare Single Gene Mutation, Syndromic, Functional",1,48
+ENPP1,0,1,Rare Single Gene Mutation,3,4
+GLRA2,0,1,"Rare Single Gene Mutation, Functional",3,15
+GRIN2B,0,1,"Rare Single Gene Mutation, Syndromic, Genetic Association",1,56
+IGF1,1,0,"Rare Single Gene Mutation, Functional",3,8
+ITPR1,0,1,"Rare Single Gene Mutation, Genetic Association",3,11
+KRR1,0,1,"Rare Single Gene Mutation, Genetic Association",3,2
+MAOA,0,1,"Rare Single Gene Mutation, Syndromic, Genetic Association, Functional",3,16
+MAP1A,1,0,Rare Single Gene Mutation,1,3
+MBD5,0,1,"Rare Single Gene Mutation, Syndromic, Functional",1,36
+PNPLA7,0,1,Rare Single Gene Mutation,3,3
+SCN2A,0,1,"Rare Single Gene Mutation, Syndromic",1,71
+TAOK1,0,1,"Rare Single Gene Mutation, Syndromic",1,3

@@ -47,3 +47,9 @@ Pushes the changes in your local repository up to the remote repository you spec
 ## git revert change
 
 	git reset HEAD~1
+
+## remove files from tracking in terminal if .gitingore don't work
+
+	find . -name .DS_Store -print0 | xargs -0 git rm --ignore-unmatch
+	find . -name *.Rproj -print0 | xargs -0 git rm --ignore-unmatch
+
