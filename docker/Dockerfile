@@ -5,7 +5,7 @@ COPY . /root/tools/
 WORKDIR /root/tools/
 RUN conda create -y --name biotools
 # make RUN commands use the new environment
-SHELL ["conda", "run", "-n", "tools", "/bin/bash", "-c"]
+SHELL ["conda", "run", "-n", "biotools", "/bin/bash", "-c"]
 # RUN in the new environment to install R and library
 RUN conda install -y -c conda-forge/label/main r-base \
     && Rscript install-R-lib.R
@@ -22,7 +22,7 @@ RUN apt-get update \
     && apt-get install -y less \
     && wget https://s3.amazonaws.com/plink2-assets/alpha2/plink2_linux_x86_64.zip \
     && unzip plink2_linux_x86_64.zip ; rm plink2_linux_x86_64.zip
-# make bash start from biotools env and export /root/tools to $PATH
+# make bash start from biotools env and export /root/tools to $PATH, this layer define config
 RUN conda init \
     && echo "conda activate biotools" >> ~/.bashrc \
     && echo "export PATH=/root/tools/:$PATH" >> ~/.bashrc

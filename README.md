@@ -10,7 +10,7 @@ mkdir -p data docker docs output/denovo output/plot-table output/tdt src temp/da
 
 * Set-up working environment by running the docker images or install the packages yourself
     * running docker images by running sr/module0-setup-docker.sh
-    *
+    * the project is run inside the docker container
 * running code from module1 to module7
     * the other scripts contain functions for each modules
 
