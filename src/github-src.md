@@ -23,6 +23,7 @@ Commit the files that you've staged in your local repository.
     git commit -m 'add md files'
     git commit -m 'v1.0 preserve dir structure'
 	git commit -m 'v2.0 sunday work'
+	git commit -m 'v4.0 update output/plot-table'
 
 
 

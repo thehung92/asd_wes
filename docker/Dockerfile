@@ -9,6 +9,8 @@ SHELL ["conda", "run", "-n", "tools", "/bin/bash", "-c"]
 # RUN in the new environment to install R and library
 RUN conda install -y -c conda-forge/label/main r-base \
     && Rscript install-R-lib.R
+# install R library for genomic visualization, this require a lot of time, so a separate layer
+RUN Rscript install-R-lib-2.R
 # RUN in the new environment to install other biotools via conda
 RUN conda install -y -c bioconda/label/main bcftools \
     && conda install -y -c bioconda/label/main plink \

@@ -3,9 +3,6 @@
 library(data.table)
 library(tidyverse)
 library(CMplot)
-library(qqman)
-library(grid)
-library(gridGraphics)
 #
 df0 <- fread(file="./output/tdt/asd.290_ibd-clean.tdt.adjusted")
 df1 <- fread(file="./output/tdt/asd.290_ibd-clean.tdt")
@@ -19,10 +16,10 @@ x[,c(1,2,9)] %>%
   mutate(CHR=gsub("23", "X", CHR)) -> output
 fwrite(x=output, file="output/tdt/regions.txt", sep="\t",
       quote=FALSE, col.names=FALSE)
-cat("output/tdt/regions.txt")
+print("output/tdt/regions.txt")
 # extract variants info from vcf file
 INPUT="./data/ASD_SAMPLES_bwa_gatk_variants_hg38_annotate.vcf.gz"
-QUERY="source ~/.bashrc ; bcftools query -R output/tdt/regions.txt -f '%CHROM %POS %ID %REF %ALT\n'"
+QUERY="bash ~/.bashrc ; bcftools query -R output/tdt/regions.txt -f '%CHROM %POS %ID %REF %ALT\n'"
 CMD=paste(QUERY, INPUT)
 df2 <- fread(cmd=CMD, header=FALSE, sep=" ",
              col.names = c("CHROM", "POS", "ID", "REF", "ALT"))
@@ -102,24 +99,3 @@ CMplot(df1,plot.type="q",box=FALSE, main=NULL,
        file="pdf",memo="",
        file.output=FALSE,verbose=TRUE,width=4,height=4)
 dev.off()
-#
-f2 <- list.files(pattern="plot.P.pdf")
-n2 <- "/Users/hung/Documents/writing/Autism_Vinmec_coop/ejhg/figure.s1.pdf"
-command <- paste("cp",f2, n2)
-system(command)
-#### ####
-#
-as_tibble(IBD.tdt) %>%
-  select(c(2,1,3,10)) -> df1
-#
-manhattan(df1, ylim=c(0,9),
-          #main="Transmission disequilibrium test",
-          #cex=0.6, cex.axis=0.9,
-          col=c("blue4","orange3"),
-          genomewideline=-log10(6.66e-7), suggestiveline=FALSE,
-          annotatePval=6.66e-7, annotateTop=FALSE,
-          chrlabs=c(1:22,"X"))
-p <- recordPlot()
-g <- grid.grabExpr(grid.echo(p))
-ggsave("figure2.pdf", plot=g, device="pdf",
-       units="mm", width=175, height=90)
