@@ -11,12 +11,15 @@ mkdir -p data docker docs output/denovo output/plot-table output/tdt src temp/da
 * Set-up working environment by running the docker images or install the packages yourself
     * running docker images by running sr/module0-setup-docker.sh
     * the project is run inside the docker container
-* running code from module1 to module7
+* running code from module1 to module8 consecutively
     * the other scripts contain functions for each modules
+    * .sh file should be run with bash shell
+    * .R file should be run with R console
+    * code should be run by each lines and following the comment inside each module
 
 ## content of project dir after running on macOS
-```
-# tree .
+```bash
+# tree -d
 ├── data
 ├── docker
 ├── docs

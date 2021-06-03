@@ -24,6 +24,11 @@ RUN apt-get update \
     && wget https://s3.amazonaws.com/plink2-assets/alpha2/plink2_linux_x86_64.zip \
     && unzip plink2_linux_x86_64.zip ; rm plink2_linux_x86_64.zip
 # make bash start from biotools env and export /root/tools to $PATH, this layer define config
+# update locale to en_US.UTD-8 to debug R
 RUN conda init \
     && echo "conda activate biotools" >> ~/.bashrc \
-    && echo "export PATH=/root/tools/:$PATH" >> ~/.bashrc
+    && echo "export PATH=/root/tools/:$PATH" >> ~/.bashrc \
+    && apt-get install -y locales \
+    && sed -i -e '/en_US.UTF-8/ s/^#\s*//' /etc/locale.gen \
+    && locale-gen en_US.UTF-8 \
+    && update-locale LANG=en_US.utf-8

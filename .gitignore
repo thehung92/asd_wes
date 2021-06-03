@@ -15,10 +15,18 @@ output/tdt
 !output/tdt/*
 #
 data/*
+#
 docs/*
-temp/*
-temp/data/*
-temp/subset/*
-# except these file
 !docs/*xlsx
+#
+temp/*
+!temp/data
+temp/data/*
+#
+!temp/subset
+temp/subset/*
+#
+!temp/ld-r2
+temp/ld-r2/*
+# except all README.md file
 !**/*.md

@@ -37,7 +37,7 @@ df.dn.vep <- df.dn.vep %>%
   distinct() # remove duplicated row
 # import vcf
 INPUT="./output/denovo/asd.284_hiconfdenovo.vcf.gz"
-CMD=paste("source ~/.bashrc; bcftools query -f '%CHROM\t%POS\t%REF\t%ALT\t%INFO/hiConfDeNovo\t%INFO/AC\n'",INPUT)
+CMD=paste("bash ~/.bashrc; bcftools query -f '%CHROM\t%POS\t%REF\t%ALT\t%INFO/hiConfDeNovo\t%INFO/AC\n'",INPUT)
 df.dn.vcf <- fread(cmd=CMD, sep="\t", header=FALSE,
                    col.names=c("chrom","pos","ref","alt","denovo","AC")) 
 # count number of mutation in vcf per sites by split with ","
@@ -99,7 +99,7 @@ lambda=2.0 # the burden
 pi=0.05
 gamma.mean.dn=(lambda-1)/pi+1
 # calibrate
-df.dnmr <- read_xls(path="~/Data/Autism_vinmec_coop/genemutation_framework/gene_mutationrate.xls")
+df.dnmr <- read_xls(path="data/gene_mutationrate.xls")
 # rate of denovo synonymous mutation across the genome (based on denovo mutation rate)
 mu <- sum(10^df.dnmr$syn)
 # expected number of synonysmous mutation
@@ -164,6 +164,6 @@ as_tibble(asd.risk.gene) %>%
 # write table S1
 merge(tada.data[,1:3], asd.risk.gene, by.x="gene.id", by.y="gene.symbol") %>%
   rename(DMIS=2, LGD=3) -> output2
-OUTPUT2="./output/plot-table/tables1.csv"
+OUTPUT2="./output/plot-table/tableS1.csv"
 write_csv(output2, file=OUTPUT2)
 

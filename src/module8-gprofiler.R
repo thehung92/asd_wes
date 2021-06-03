@@ -4,8 +4,8 @@ library(tidyverse)
 library(gprofiler2)
 library(openxlsx)
 # import gene set
-df0 <- read.csv(file="./output/plot-table/table1.csv")
-df1 <- read.delim("output/plot-table/TADA_denovoonly.txt")
+df0 <- read.csv(file="output/plot-table/table1.csv")
+df1 <- read.csv("output/plot-table/table2.csv")
 #
 GeneList <- c(df1$gene.id, df0$SYMBOL)
 #
@@ -32,7 +32,5 @@ as_tibble(gostRslt2$result) %>%
   group_by(source) %>%
   arrange(p_value, .by_group=TRUE) -> df
 df %>% filter(p_value<=0.05) -> output
-OUTPUT="output/plot-table/gprofiler_fdr.xlsx"
-write.xlsx(output, file=OUTPUT)
-OUTPUT="output/plot-table/tables2.csv"
+OUTPUT="output/plot-table/tableS2.csv"
 write_csv(output, file=OUTPUT)

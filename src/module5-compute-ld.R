@@ -1,5 +1,6 @@
 #!/usr/bin/env Rscript
 # library
+library(data.table)
 library(tidyverse)
 # create list of parents from fam file
 # this will be used to compute LD of unrelated individuals
@@ -40,5 +41,6 @@ for (i in 1:4) {
   colnames(mat.r2) <- vt.snp
   rownames(mat.r2) <- vt.snp
   OUTPUT3=paste0("temp/ld-r2/matrix.r2.unrelated.variant",i,".txt")
-  write_delim(mat.r2, file=OUTPUT3, delim="\t", col_names = FALSE)
+  fwrite(mat.r2, file=OUTPUT3, sep=" ", quote=FALSE,
+         row.names=TRUE, col.names=TRUE)
 }
