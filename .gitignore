@@ -4,15 +4,15 @@
 .Rhistory
 .Rdata
 **/.DS_Store
-# pair of rule for dir
+# pair of rule for subdir
 output/*
 !output/plot-table
 #
 output/denovo/*
 !output/denovo
 #
-output/tdt
-!output/tdt/*
+!output/tdt
+output/tdt/*
 #
 data/*
 #
