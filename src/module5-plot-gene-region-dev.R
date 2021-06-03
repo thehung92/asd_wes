@@ -34,7 +34,7 @@ p2 <- ggplot(head(recomb.rate), aes(pos, recomb_rate)) +
   theme(axis.line.y=element_line(color=col.axis),
         axis.ticks.y=element_line(color=col.axis),
         axis.text.y=element_text(color=col.axis),
-        text=element_text(family="Arial", face="bold",color=col.axis),
+        text=element_text(family="Helvetica", face="bold",color=col.axis),
         axis.line.x=element_blank(),
         axis.text.x=element_blank(),
         axis.ticks.x=element_blank(),
@@ -86,7 +86,7 @@ p <- ggplot(df, aes(x,y,color=range,shape=range, group=range)) +
                      labels=break.label
   ) +
   theme_light() +
-  theme(text=element_text(family="Arial", color="grey50"),
+  theme(text=element_text(family="Helvetica", color="grey50"),
         legend.position="bottom",
         legend.direction="horizontal",
         legend.background=element_rect(size=0.2,linetype="solid",
@@ -98,10 +98,8 @@ p <- addSmallLegend(p,2.5,8,0.5)
 leg <- get_legend(p) %>% as_ggplot()
 #### create dashed line ####
 text <- "Threshold:  <span style='color:red'>**\u2012 \u2012 \u2012**</span>  Bonferroni correction"
-g <- richtext_grob(text,
-                   #x=0.75,y=0.498,
-                   hjust=0,vjust=0.5,
-                   gp=gpar(fontfamily="Arial", fontsize=8, col="#808080"))
+g <- richtext_grob(text, hjust=0,vjust=0.5,
+                   gp=gpar(fontfamily="Helvetica", fontsize=8, col="#808080"))
 #### loop plot ####
 
 for (i in 1:4) {
@@ -179,7 +177,7 @@ for (i in 1:4) {
   displayPars(grtrack) <- list(rotation.title=0,
                                background.title="transparent",
                                fontcolor.title="black",
-                               fontfamily.group="Arial",
+                               fontfamily.group="Helvetica",
                                just.group="above")
   # create recombination rate track
   cat("creating recombination rate track")

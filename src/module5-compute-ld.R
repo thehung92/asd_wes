@@ -40,29 +40,5 @@ for (i in 1:4) {
   colnames(mat.r2) <- vt.snp
   rownames(mat.r2) <- vt.snp
   OUTPUT3=paste0("temp/ld-r2/matrix.r2.unrelated.variant",i,".txt")
-  write_delim(output, file=OUTPUT3, delim="\t", col_names = FALSE)
-}
-
-# import matrix and list of variant
-matrix.r2 <- read.delim("~/Data/Autism_vinmec_coop/run_2/LDscore/variant1.region.ld.ld", header=FALSE)
-list.snp <- read.delim("/Users/hung/Data/Autism_vinmec_coop/run_2/Gviz_annotate_2/variant1.region.txt", col.names="SNP", header=FALSE)
-# append colnames rownames and write file
-colnames(matrix.r2) <- list.snp$SNP
-rownames(matrix.r2) <- list.snp$SNP
-write.table(matrix.r2, file="matrix.r2.variant1.txt",
-            sep="\t", quote=FALSE)
-
-for (i in 1:4) {
-  # loop through 4 file
-  # import matrix and list of variant
-  input0=paste0("~/Data/Autism_vinmec_coop/run_2/LDscore/variant",i,".region.ldr2.unrelated.ld")
-  input1=paste0("/Users/hung/Data/Autism_vinmec_coop/run_2/Gviz_annotate_2/variant",i,".region.txt")
-  matrix.r2 <- read.delim(input0, header=FALSE)
-  list.snp <- read.delim(input1, col.names="SNP", header=FALSE)
-  # append colnames rownames and write file
-  colnames(matrix.r2) <- list.snp$SNP
-  rownames(matrix.r2) <- list.snp$SNP
-  output=paste0("matrix.r2.unrelated.variant",i,".txt")
-  write.table(matrix.r2, file=output,
-              sep="\t", quote=FALSE)
+  write_delim(mat.r2, file=OUTPUT3, delim="\t", col_names = FALSE)
 }

@@ -6,6 +6,7 @@ docker pull thehung92phuyen/biotools:v3.0
 # and mount the folder that have the reference of hg38.fasta and genetic map
 # change REFDIR="/full/path/dir/contain-hg38.fasta-genetic.map/"
 REFDIR="/Users/hung/Tools/Library/"
+# REFDIR="/mnt/f/Data/Genomics"
 docker run --name asd_wes \
     -v $PWD:/home/public/ \
     -v $REFDIR:/home/reference/ \
