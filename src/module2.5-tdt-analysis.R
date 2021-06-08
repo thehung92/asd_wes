@@ -5,23 +5,25 @@ library(tidyverse)
 #
 df0 <- fread(file="./output/tdt/asd.290_ibd-clean.tdt.adjusted")
 df1 <- fread(file="./output/tdt/asd.290_ibd-clean.tdt")
-# filter based on FDR_BH <0.05 with Region
-as_tibble(df0) %>%
-  filter(FDR_BH < 0.05) -> x
-# annotate region with df1
-x[,c(1,2,9)] %>%
-  left_join(df1[,1:3], by=c("CHR", "SNP")) %>%
-  select(1,4) %>%
-  mutate(CHR=gsub("23", "X", CHR)) -> output
-fwrite(x=output, file="output/tdt/regions.txt", sep="\t",
+# filter based on FDR_BH <0.05 with Region and annotate with df1
+df0 %>%
+  filter(BONF < 0.05) %>%
+  select(1,2,5) %>%
+  left_join(., df1[,1:3], by=c("CHR","SNP")) %>%
+  mutate(CHR=gsub("23", "X", CHR)) %>%
+  select(1,4) -> region
+# write region to REGION file
+REGION="output/tdt/regions.txt"
+fwrite(x=region, file=REGION, sep="\t",
       quote=FALSE, col.names=FALSE)
-print("output/tdt/regions.txt")
+print(REGION)
 # extract variants info from vcf file
 INPUT="./data/ASD_SAMPLES_bwa_gatk_variants_hg38_annotate.vcf.gz"
-QUERY="bash ~/.bashrc ; bcftools query -R output/tdt/regions.txt -f '%CHROM %POS %ID %REF %ALT\n'"
+QUERY="bash ~/.bashrc ; bcftools query -f '%CHROM %POS %ID %REF %ALT\n' -R"
+ARG=REGION
 # for mac use the below QUERY
-# QUERY="source ~/.bashrc ; bcftools query -R output/tdt/regions.txt -f '%CHROM %POS %ID %REF %ALT\n'"
-CMD=paste(QUERY, INPUT)
+# QUERY="source ~/.bashrc ; bcftools query -f '%CHROM %POS %ID %REF %ALT\n' -R"
+CMD=paste(QUERY, ARG, INPUT)
 df2 <- fread(cmd=CMD, header=FALSE, sep=" ",
              col.names = c("CHROM", "POS", "ID", "REF", "ALT"))
 # write out in vcf format for annotation with VEP web tools
@@ -33,6 +35,8 @@ cat(OUTPUT)
 # annotate ./output/tdt/asd.290_tdt-sig-var.vcf with VEP web tools
 # we will get asd.290_tdt-vep.txt
 INPUT="./output/tdt/asd.290_tdt-vep.txt"
+
+
 
 # take variants with BONF correction P-value 0.05 only
 df0 %>%
