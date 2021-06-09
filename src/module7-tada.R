@@ -38,6 +38,7 @@ df.dn.vep <- df.dn.vep %>%
 # import vcf
 INPUT="./output/denovo/asd.284_hiconfdenovo.vcf.gz"
 CMD=paste("bash ~/.bashrc; bcftools query -f '%CHROM\t%POS\t%REF\t%ALT\t%INFO/hiConfDeNovo\t%INFO/AC\n'",INPUT)
+# CMD=paste("source ~/.bashrc; bcftools query -f '%CHROM\t%POS\t%REF\t%ALT\t%INFO/hiConfDeNovo\t%INFO/AC\n'",INPUT) 
 df.dn.vcf <- fread(cmd=CMD, sep="\t", header=FALSE,
                    col.names=c("chrom","pos","ref","alt","denovo","AC")) 
 # count number of mutation in vcf per sites by split with ","
@@ -157,13 +158,14 @@ OUTPUT="./output/plot-table/table2.csv"
 write_csv(output, file=OUTPUT)
 #
 #### read SFARI ####
-asd.risk.gene <- read.csv("./data/SFARI-Gene_genes_10-29-2020release_11-04-2020export.csv")
+INPUT <- system("ls -t ./data/SFARI* | head -1", intern=TRUE)
+asd.risk.gene <- read.csv(INPUT)
 as_tibble(asd.risk.gene) %>%
   select(2,6,7,9) %>%
   filter(gene.score > 0) -> asd.risk.gene
 # write table S1
 merge(tada.data[,1:3], asd.risk.gene, by.x="gene.id", by.y="gene.symbol") %>%
   rename(DMIS=2, LGD=3) -> output2
-OUTPUT2="./output/plot-table/tableS1.csv"
+OUTPUT2="./output/plot-table/tableS1_dev.csv"
 write_csv(output2, file=OUTPUT2)
 

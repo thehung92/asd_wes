@@ -4,10 +4,7 @@ library(data.table)
 library(tidyverse)
 library(jsonlite)
 library(httr)
-library(tidyjson)
-#
 # extract variants info from tdt analysis
-#
 df0 <- fread(file="./output/tdt/asd.290_ibd-clean.tdt.adjusted")
 df1 <- fread(file="./output/tdt/asd.290_ibd-clean.tdt")
 # filter based on FDR_BH <0.05 with Region
@@ -30,6 +27,7 @@ df2 <- fread(cmd=CMD, header=FALSE, sep=" ",
 df2[,-3] %>%
   mutate(variants=paste(CHROM,POS,".",REF,ALT,".",".",".")) %>%
   select(5) %>% as.list() %>% toJSON() -> body
+# ensembls vep rest api
 server <- "https://rest.ensembl.org"
 ext <- "/vep/homo_sapiens/region/?CADD=1&canonical=1"
 r.bonf <- POST(paste(server, ext, sep = ""),
@@ -39,43 +37,15 @@ stop_for_status(r.bonf, task="VEP rest api query")
 content(r.bonf) %>% toJSON() %>%
   fromJSON() %>%
   select(-"colocated_variants") -> df3
-
-#### test ####
 # unnest column with list of single element
-df3 %>%
+df4 <- df3 %>%
   relocate(transcript_consequences, .after=last_col()) %>%
   unnest(!"transcript_consequences") %>%
-  unnest("transcript_consequences", names_sep=".") %>% view()
+  unnest("transcript_consequences", names_sep=".") %>%
+  unnest(cols=starts_with("transcript_consequences") & !matches("consequence_terms"), keep_empty=TRUE) %>%
+  rowwise() %>% mutate_at(vars(matches("consequence_terms")), toString) %>%
   filter(transcript_consequences.canonical=="1") %>%
-  filter(transcript_consequences.gene_symbol!="NULL") %>%
-  unnest(cols=starts_with("transcript_consequences"), keep_empty=TRUE) -> temp
-# str(temp, max.level=2)
-# unnest nested column
-df3 %>%
-  select("transcript_consequences") %>%
-  unnest(everything(), keep_empty=TRUE)
-# tidyjson
-content(r.bonf) -> temp
-as_tbl_json(temp) %>%
-#### ####
-#
-df4 <- apply(df3, 1, function(x) {
-  # x is one row of df3 dataframe
-  x["transcript_consequences"][[1]] %>%
-    select(-"strand") %>%
-    filter(canonical=="1") %>%
-    filter(gene_symbol!="NULL") -> y2
-  as_tibble(x) %>%
-    select(-"transcript_consequences") %>%
-    distinct() -> y1
-  y <- cbind(y1, y2)
-  return(y)
-}) %>% bind_rows(.)
-# convert df4 list value to write to file
-df4 %>%
-  mutate_if(is.list, function(x){
-    unlist(x) %>% paste(., collapse=",")
-  }) -> temp
+  filter(!is.na(transcript_consequences.gene_symbol))
 # save the version of rest api at the day of running code and write to output
 server <- "https://rest.ensembl.org"
 ext <- "/info/eg_version?"
@@ -98,8 +68,46 @@ stop_for_status(v.info, task="VEP rest api query")
 toJSON(content(v.info)) %>%
   fromJSON() -> temp
 head3 <- paste("# Version of the Ensembl API used by the REST server:", names(temp), temp[[1]])
-# OUTPUT
+#### OUTPUT for supplementary ####
 OUTPUT="output/tdt/asd.290_tdt-vep-rest-api.txt"
 output <- tibble(head=c(head1, head2, head3))
 write_delim(output, OUTPUT, delim="\t", col_names=FALSE)
 write_delim(df4, OUTPUT, delim="\t", append=TRUE)
+
+#### OUTPUT for plot-table ####
+# required field, chrom, pos, ref, alt from df2
+output <- df2 %>%
+  left_join(., df1[,c("SNP", "A1", "OR", "P")], by=c("ID"="SNP")) %>% # annotate with A1, OR from df1
+  mutate_at("POS", as.character) %>%
+  rename("P-value"="P")
+# transform df4 for merging
+output <- df4 %>%
+  separate(input, into=c("CHROM","POS","ID","REF","ALT","QUAL","FILTER","INFO"), sep=" ") %>%
+  select("CHROM","POS","transcript_consequences.cadd_phred", "transcript_consequences.gene_symbol") %>%
+  rename("CADD-score"=3, "SYMBOL"=4) %>%
+  left_join(output, ., by=c("CHROM", "POS"))
+# download latest SFARI database
+URL <- "https://gene.sfari.org//wp-content/themes/sfari-gene/utilities/download-csv.php?api-endpoint=genes"
+CMD <- paste("wget -P ./data/ --content-disposition", URL)
+system(CMD)
+# read in the newly download database
+CMD <- "ls -t ./data/SFARI* | head -1" # this will get the latest file path
+INPUT <- system(CMD, intern=TRUE)
+db.sfari <- fread(file=INPUT)
+output <- db.sfari[,c("gene-symbol", "gene-score")] %>%
+  rename("SFARI-score"="gene-score") %>%
+  left_join(output, ., by=c("SYMBOL"="gene-symbol"))
+# format output
+output %>%
+  mutate_at(c("REF", "ALT"), ~ifelse(.==A1, paste0(.,"*"), .)) %>%
+  select(-"A1") %>%
+  unite("CHR:POS", 1:2, remove=TRUE, sep=":") %>%
+  unite("REF/ALT",3:4, remove=TRUE, sep="/") %>%
+  select(2,1,3:8) -> output
+# official output is inside: OUTPUT="output/plot-table/table1.csv"
+# write
+OUTPUT="output/plot-table/table1_dev.csv"
+heading <- paste("# SFARI database version:", gsub(".*(\\d+-\\d+-\\d+release).*", "\\1", INPUT)) %>%
+  as.data.frame()
+write_delim(heading, OUTPUT, delim="\t", col_names = FALSE)
+write_delim(output, OUTPUT, delim="\t", append=TRUE)
